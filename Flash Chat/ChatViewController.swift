@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import SVProgressHUD
+import ChameleonFramework
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     // Declare instance variables here
@@ -35,6 +37,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         configureTableView()
         retrieveMessages()
+        
+        messageTableView.separatorStyle = .none
     }
 
     ///////////////////////////////////////////
@@ -51,9 +55,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.avatarImageView.image = UIImage(named: "egg")
         
         if messageArray[indexPath.row].sender == Auth.auth().currentUser?.email {
-            cell.messageBackground.backgroundColor = UIColor.blue
-        } else {
-            cell.messageBackground.backgroundColor = UIColor.green
+            cell.messageBackground.backgroundColor = UIColor.flatSkyBlue()
         }
         
         return cell
@@ -128,6 +130,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func retrieveMessages() {
+        SVProgressHUD.show()
         let messageDB = Database.database().reference().child("Messages")
         
         messageDB.observe(.childAdded) { (snapshot) in
@@ -142,6 +145,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             self.messageArray.append(message)
             self.configureTableView()
+            SVProgressHUD.dismiss()
             self.messageTableView.reloadData()
         }
     }

@@ -19,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         -> Bool {
             FirebaseApp.configure()
             
-            let database = Database.database().reference()
-            database.setValue("We've got data")
-            
             return true
     }
     
